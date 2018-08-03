@@ -1,0 +1,1 @@
+CHEESE_URI = process.env.CHEESE_URI || localhost:8080;
