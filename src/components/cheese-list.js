@@ -9,6 +9,7 @@ class CheeseList extends React.Component{
 
 
   render(){
+    console.log('IN COMPONENT',this.props.error);
     const cheeseItems = this.props.cheeses.map((cheeseName, index) => {
       return <li className='cheese-type' key={index}> {cheeseName} </li>
     })
@@ -16,7 +17,7 @@ class CheeseList extends React.Component{
     if(this.props.loading){
       return <div>Loading... </div>
     }
-    
+
     if(this.props.error){
       return <div>{this.props.error}</div>
     }

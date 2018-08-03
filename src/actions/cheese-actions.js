@@ -1,3 +1,4 @@
+import {API_BASE_URL} from '../config.js';
 
 export const CHEESE_GET_REQUEST = 'CHEESE_GET_REQUEST';
 export function cheeseGetRequest() {
@@ -24,26 +25,27 @@ export function cheeseGetFailure(err){
 
 export const fetchCheeses = () => (dispatch) => {
   dispatch(cheeseGetRequest());
-  return fetch('http://localhost:8080/api/cheese')
+  //return fetch('http://localhost:8080/api/cheese')
+  return fetch(`${API_BASE_URL}/api/cheese`)
+  // return fetch('https://morgan-cheesehub-server.herokuapp.com/api/cheese')
     .then(cheeseListRes => {
-      console.log(cheeseListRes);
       if (!cheeseListRes.ok) {
-        console.log('RESPONSE NOT OKAY');
         return Promise.reject({
-          message: 'Response NOT okay'
+          message: 'Response NOT okay',
+          status: cheeseListRes.status,
+          statusText: cheeseListRes.statusText
         });
-      } else if (!cheeseListRes.body) {
-        console.log('NO RESPONSE');
-        return Promise.reject({
-          message: 'No response at all!'
-        });
-      }
 
+      }
       return cheeseListRes.json();
     })
 
     .then(cheeseList => {
-      dispatch(cheeseGetSuccess(cheeseList));
+      return dispatch(cheeseGetSuccess(cheeseList));
     })
-    .catch(err => cheeseGetFailure(err));
+
+    .catch(err => {
+      console.log('ERR',err);
+      return dispatch(cheeseGetFailure(err.statusText));
+    });
 }
